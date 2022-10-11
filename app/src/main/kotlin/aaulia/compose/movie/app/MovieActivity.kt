@@ -9,11 +9,7 @@ class MovieActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MovieAppTheme {
-                //
-                //
-                //
-            }
+            MovieApp()
         }
     }
 }
