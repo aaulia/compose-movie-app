@@ -1,18 +1,11 @@
 package aaulia.compose.movie.features.home
 
-import aaulia.compose.movie.R
 import aaulia.compose.movie.ui.theme.MovieAppTheme
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,52 +15,45 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-
-
-sealed class HomeNavItem(
-    val route: String,
-    @StringRes
-    val label: Int,
-    val image: ImageVector
-) {
-    object Playing : HomeNavItem(
-        route = "playing",
-        label = R.string.home_nav_playing,
-        image = Icons.Default.PlayArrow
-    )
-
-    object Popular : HomeNavItem(
-        route = "popular",
-        label = R.string.home_nav_popular,
-        image = Icons.Default.Star
-    )
-
-    object Nearing : HomeNavItem(
-        route = "nearing",
-        label = R.string.home_nav_nearing,
-        image = Icons.Default.List
-    )
-}
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 
 
 @Composable
 fun HomeScreen(
     navController: NavHostController = rememberNavController()
 ) {
-    Scaffold(bottomBar = {
-        HomeBottomBar(
-            navController = navController,
-            items = listOf(
-                HomeNavItem.Playing,
-                HomeNavItem.Popular,
-                HomeNavItem.Nearing,
+    var topAppBarTitle by remember { mutableStateOf("") }
+
+
+    val currentContext = LocalContext.current
+    LaunchedEffect(navController) {
+        navController.currentBackStackEntryFlow
+            .map { HomeNavItem.fromRoute(it.destination.route.orEmpty()) ?: HomeNavItem.Default }
+            .collectLatest { currentNavItem ->
+                topAppBarTitle = currentContext.getString(currentNavItem.label)
+            }
+    }
+
+
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text(text = topAppBarTitle) })
+        },
+        bottomBar = {
+            HomeBottomBar(
+                navController = navController,
+                items = listOf(
+                    HomeNavItem.Playing,
+                    HomeNavItem.Popular,
+                    HomeNavItem.Nearing,
+                )
             )
-        )
-    }) { paddingValues ->
+        }) { paddingValues ->
         NavHost(
             modifier = Modifier.padding(paddingValues),
             navController = navController,
-            startDestination = HomeNavItem.Playing.route
+            startDestination = HomeNavItem.Default.route
         ) {
             composable(HomeNavItem.Playing.route) { }
             composable(HomeNavItem.Popular.route) { }
@@ -76,6 +62,7 @@ fun HomeScreen(
     }
 }
 
+
 @Composable
 private fun HomeBottomBar(
     navController: NavHostController,
@@ -83,7 +70,7 @@ private fun HomeBottomBar(
 ) {
     BottomNavigation {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route ?: ""
+        val currentRoute = navBackStackEntry?.destination?.route
 
         for (item in items) {
             BottomNavigationItem(
@@ -104,6 +91,7 @@ private fun HomeBottomBar(
         }
     }
 }
+
 
 @Preview(device = Devices.NEXUS_5)
 @Composable
