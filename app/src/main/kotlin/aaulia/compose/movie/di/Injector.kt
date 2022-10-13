@@ -25,6 +25,7 @@ object Injector {
                 val request = chain.request()
                 val nextUrl = request.url.newBuilder()
                     .addQueryParameter("api_key", BuildConfig.TMDB_API_KEY)
+                    .addQueryParameter("region", BuildConfig.TMDB_REGION)
                     .build()
 
                 chain.proceed(
