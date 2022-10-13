@@ -2,6 +2,7 @@ package aaulia.compose.movie.features.list
 
 import aaulia.compose.movie.data.TMDBRepository
 import aaulia.compose.movie.ui.theme.MovieAppTheme
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -26,8 +27,9 @@ enum class MovieType {
 
 
 @Composable
-fun List(
+fun ListScreen(
     movieType: MovieType,
+    onClick: (Int) -> Unit = { },
     viewModel: ListViewModel = viewModel(
         factory = viewModelFactory {
             initializer {
@@ -45,7 +47,7 @@ fun List(
         items(
             count = movies.itemCount,
         ) { index ->
-            movies[index]?.let { ListItem(it) }
+            movies[index]?.let { ListItem(it, onClick) }
         }
     }
 }
@@ -55,17 +57,23 @@ fun List(
 @Composable
 fun ListPreview() {
     MovieAppTheme {
-        List(MovieType.PLAYING)
+        ListScreen(MovieType.PLAYING)
     }
 }
 
 
 @Composable
-fun ListItem(index: Int) {
+fun ListItem(
+    index: Int,
+    onClick: (Int) -> Unit = { }
+) {
     Surface(
         modifier = Modifier
             .safeContentPadding()
-            .height(192.dp),
+            .height(192.dp)
+            .clickable {
+                onClick(index)
+            },
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colors.secondary
     ) {

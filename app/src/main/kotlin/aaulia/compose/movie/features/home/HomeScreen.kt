@@ -1,6 +1,6 @@
 package aaulia.compose.movie.features.home
 
-import aaulia.compose.movie.features.list.List
+import aaulia.compose.movie.features.list.ListScreen
 import aaulia.compose.movie.features.list.MovieType
 import aaulia.compose.movie.ui.theme.MovieAppTheme
 import androidx.compose.foundation.layout.padding
@@ -22,13 +22,14 @@ import kotlinx.coroutines.flow.mapNotNull
 
 
 @Composable
-fun HomeScreen(
-    navController: NavHostController = rememberNavController()
-) {
+fun HomeScreen(onMovieClick: (Int) -> Unit = { }) {
+    val navController: NavHostController = rememberNavController()
+    val currentContext = LocalContext.current
+
+
     var topAppBarTitle by remember { mutableStateOf("") }
 
 
-    val currentContext = LocalContext.current
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow
             .mapNotNull { backStackEntry ->
@@ -60,9 +61,9 @@ fun HomeScreen(
             navController = navController,
             startDestination = "${HomeRoute.DEFAULT}"
         ) {
-            composable("${HomeRoute.PLAYING}") { List(MovieType.PLAYING) }
-            composable("${HomeRoute.POPULAR}") { List(MovieType.POPULAR) }
-            composable("${HomeRoute.NEARING}") { List(MovieType.NEARING) }
+            composable("${HomeRoute.PLAYING}") { ListScreen(MovieType.PLAYING, onMovieClick) }
+            composable("${HomeRoute.POPULAR}") { ListScreen(MovieType.POPULAR, onMovieClick) }
+            composable("${HomeRoute.NEARING}") { ListScreen(MovieType.NEARING, onMovieClick) }
         }
     }
 }
