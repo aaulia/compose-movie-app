@@ -1,41 +1,20 @@
 package aaulia.compose.movie.features.list
 
-import aaulia.compose.movie.data.MovieRepository
-import aaulia.compose.movie.features.list.MovieType.*
+import aaulia.compose.movie.data.repository.MovieRepository
+import aaulia.compose.movie.di.Injector
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 
 
-class ListViewModel(movieType: MovieType, movieRepo: MovieRepository) : ViewModel() {
-    val movieFlow = Pager(PagingConfig(2)) { MoviePagingSource(movieType, movieRepo) }
+class ListViewModel(
+    movieType: MovieType,
+    movieRepo: MovieRepository = Injector.tmdbRepository
+) : ViewModel() {
+    val movieFlow = Pager(PagingConfig(2)) { ListPagingSource(movieType, movieRepo) }
         .flow
         .cachedIn(viewModelScope)
 }
 
-class MoviePagingSource(
-    movieType: MovieType,
-    movieRepo: MovieRepository
-) : PagingSource<Int, Int>() {
-    val getData: (Int) -> List<Int> = when (movieType) {
-        PLAYING -> movieRepo::getPlayingMovie
-        POPULAR -> movieRepo::getPopularMovie
-        NEARING -> movieRepo::getNearingMovie
-    }
-
-    override fun getRefreshKey(state: PagingState<Int, Int>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
-            val anchorPage = state.closestPageToPosition(anchorPosition)
-            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
-        }
-    }
-
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Int> {
-        val nextPageNum = params.key ?: 1
-        return LoadResult.Page(
-            data = getData(nextPageNum),
-            prevKey = null,
-            nextKey = nextPageNum + 1
-        )
-    }
-}

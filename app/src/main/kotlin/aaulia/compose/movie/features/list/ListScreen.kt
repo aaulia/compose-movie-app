@@ -1,6 +1,6 @@
 package aaulia.compose.movie.features.list
 
-import aaulia.compose.movie.data.TMDBRepository
+import aaulia.compose.movie.data.repository.TMDBRepository
 import aaulia.compose.movie.ui.theme.MovieAppTheme
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -33,7 +33,7 @@ fun ListScreen(
     viewModel: ListViewModel = viewModel(
         factory = viewModelFactory {
             initializer {
-                ListViewModel(movieType, TMDBRepository())
+                ListViewModel(movieType)
             }
         })
 ) {
@@ -47,7 +47,7 @@ fun ListScreen(
         items(
             count = movies.itemCount,
         ) { index ->
-            movies[index]?.let { ListItem(it, onClick) }
+            movies[index]?.let { movie -> ListItem(movie.id, onClick) }
         }
     }
 }
