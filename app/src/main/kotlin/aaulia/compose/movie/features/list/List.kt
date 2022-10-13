@@ -1,10 +1,10 @@
 package aaulia.compose.movie.features.list
 
+import aaulia.compose.movie.data.TMDBRepository
 import aaulia.compose.movie.ui.theme.MovieAppTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.paging.compose.collectAsLazyPagingItems
 
 enum class MovieType {
     PLAYING,
@@ -30,18 +31,21 @@ fun List(
     viewModel: ListViewModel = viewModel(
         factory = viewModelFactory {
             initializer {
-                ListViewModel(movieType)
+                ListViewModel(movieType, TMDBRepository())
             }
         })
 ) {
+    val movies = viewModel.movieFlow.collectAsLazyPagingItems()
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(viewModel.movies) { index ->
-            ListItem(index)
+        items(
+            count = movies.itemCount,
+        ) { index ->
+            movies[index]?.let { ListItem(it) }
         }
     }
 }

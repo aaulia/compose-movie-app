@@ -34,8 +34,7 @@ fun HomeScreen(
             .mapNotNull { backStackEntry ->
                 backStackEntry.destination.route
                     ?.let(HomeRoute::valueOf)
-                    ?.let(HomeNavItem.Companion::fromRoute)
-                    ?.let(HomeNavItem::label)
+                    ?.let(HomeRoute::label)
                     ?.let(currentContext::getString)
             }
             .collectLatest { topAppBarTitle = it }
@@ -50,16 +49,16 @@ fun HomeScreen(
             HomeBottomBar(
                 navController = navController,
                 items = listOf(
-                    HomeNavItem.Playing,
-                    HomeNavItem.Popular,
-                    HomeNavItem.Nearing,
+                    HomeRoute.PLAYING,
+                    HomeRoute.POPULAR,
+                    HomeRoute.NEARING,
                 )
             )
         }) { paddingValues ->
         NavHost(
             modifier = Modifier.padding(paddingValues),
             navController = navController,
-            startDestination = "${HomeRoute.PLAYING}"
+            startDestination = "${HomeRoute.DEFAULT}"
         ) {
             composable("${HomeRoute.PLAYING}") { List(MovieType.PLAYING) }
             composable("${HomeRoute.POPULAR}") { List(MovieType.POPULAR) }
@@ -72,19 +71,21 @@ fun HomeScreen(
 @Composable
 private fun HomeBottomBar(
     navController: NavHostController,
-    items: List<HomeNavItem>
+    items: List<HomeRoute>
 ) {
     BottomNavigation {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route?.let(HomeRoute::valueOf)
+        val currentRoute = navBackStackEntry?.destination?.route
+            ?.let(HomeRoute::valueOf)
+            ?: HomeRoute.DEFAULT
 
-        for (item in items) {
+        for (route in items) {
             BottomNavigationItem(
-                selected = currentRoute?.equals(item.route) ?: false,
-                icon = { Icon(imageVector = item.image, contentDescription = "") },
-                label = { Text(text = stringResource(id = item.label)) },
+                selected = route == currentRoute,
+                icon = { Icon(imageVector = route.image, contentDescription = "") },
+                label = { Text(text = stringResource(id = route.label)) },
                 onClick = {
-                    navController.navigate("${item.route}") {
+                    navController.navigate("$route") {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
