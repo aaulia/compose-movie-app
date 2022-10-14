@@ -1,5 +1,6 @@
 package aaulia.compose.movie.data.local.model
 
+import aaulia.compose.movie.data.remote.model.MovieDetail
 import aaulia.compose.movie.data.remote.model.MovieSimple
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -37,4 +38,19 @@ fun MovieSimple.toMovie() =
         posterPath = posterPath,
         backdropPath = backdropPath,
         homepage = ""
+    )
+
+fun MovieDetail.toMovie() =
+    Movie(
+        id = id,
+        imdbId = imdbId,
+        title = title,
+        tagline = tagline,
+        overview = overview,
+        popularity = popularity,
+        voteAverage = voteAverage,
+        voteCount = voteCount,
+        posterPath = posterPath,
+        backdropPath = backdropPath,
+        homepage = homepage
     )
