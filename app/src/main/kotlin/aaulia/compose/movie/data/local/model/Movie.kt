@@ -2,6 +2,8 @@ package aaulia.compose.movie.data.local.model
 
 import aaulia.compose.movie.data.remote.model.MovieDetail
 import aaulia.compose.movie.data.remote.model.MovieSimple
+import aaulia.compose.movie.data.remote.model.fullBackdropPath
+import aaulia.compose.movie.data.remote.model.fullPosterPath
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -35,8 +37,8 @@ fun MovieSimple.toMovie() =
         popularity = popularity,
         voteAverage = voteAverage,
         voteCount = voteCount,
-        posterPath = posterPath,
-        backdropPath = backdropPath,
+        posterPath = fullPosterPath,
+        backdropPath = fullBackdropPath,
         homepage = ""
     )
 
@@ -50,7 +52,7 @@ fun MovieDetail.toMovie() =
         popularity = popularity,
         voteAverage = voteAverage,
         voteCount = voteCount,
-        posterPath = posterPath,
-        backdropPath = backdropPath,
+        posterPath = fullPosterPath,
+        backdropPath = fullBackdropPath,
         homepage = homepage
     )
