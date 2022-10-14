@@ -40,6 +40,7 @@ object Injector {
     private val json by lazy {
         Json {
             ignoreUnknownKeys = true
+            coerceInputValues = true
         }
     }
 
@@ -53,9 +54,9 @@ object Injector {
             .build()
     }
 
-    private val tmdbService: TMDBService by lazy {
+    private val service: TMDBService by lazy {
         retrofit.create()
     }
 
-    val tmdbRepository: MovieRepository by lazy { TMDBRepository(tmdbService) }
+    val repository: MovieRepository by lazy { TMDBRepository(service) }
 }

@@ -1,6 +1,6 @@
 package aaulia.compose.movie.data.repository
 
-import aaulia.compose.movie.data.model.MoviePage
+import aaulia.compose.movie.data.remote.model.MoviePage
 
 interface MovieRepository {
     suspend fun getPlaying(page: Int): MoviePage

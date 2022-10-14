@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.serialization'
+    id 'com.google.devtools.ksp'
 }
 
 def localProperties = new Properties()
@@ -95,6 +96,10 @@ dependencies {
 
     implementation 'io.coil-kt:coil:2.2.2'
     implementation 'io.coil-kt:coil-compose:2.2.2'
+
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

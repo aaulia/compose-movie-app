@@ -1,4 +1,4 @@
-package aaulia.compose.movie.data.model
+package aaulia.compose.movie.data.remote.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MoviePage(
     val page: Int,
-    val results: List<MovieItem>,
+    val results: List<MovieSimple>,
 
     @SerialName("total_pages")
     val totalPages: Int,

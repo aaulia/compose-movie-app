@@ -1,7 +1,7 @@
 package aaulia.compose.movie.features.list
 
 import aaulia.compose.movie.R
-import aaulia.compose.movie.data.model.MovieItem
+import aaulia.compose.movie.features.list.model.Movie
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +24,7 @@ import coil.request.ImageRequest
 
 @Composable
 fun ListItem(
-    movie: MovieItem,
+    movie: Movie,
     onClick: (Int) -> Unit = { }
 ) {
     Box(
