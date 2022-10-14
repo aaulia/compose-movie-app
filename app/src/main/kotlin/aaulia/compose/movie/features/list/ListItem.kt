@@ -5,10 +5,7 @@ import aaulia.compose.movie.data.model.MovieItem
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -19,7 +16,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,17 +56,24 @@ fun ListItem(
             )
         }
 
-        Text(
-            text = movie.title,
-            color = MaterialTheme.colors.onPrimary,
-            fontFamily = FontFamily.SansSerif,
-            fontSize = 12.sp,
-            textAlign = TextAlign.Center,
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
-                .background(color = MaterialTheme.colors.primaryVariant)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .background(color = MaterialTheme.colors.primary)
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-        )
+                .height(48.dp)
+        ) {
+            Text(
+                text = movie.title,
+                color = MaterialTheme.colors.onPrimary,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(
+                    horizontal = 16.dp,
+                    vertical = 4.dp
+                )
+            )
+        }
     }
 }
