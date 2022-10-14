@@ -24,9 +24,11 @@ fun MovieApp() {
                 route = "home",
                 arguments = emptyList()
             ) {
-                HomeScreen(onMovieClick = { movieId ->
-                    navController.navigate("info/$movieId")
-                })
+                HomeScreen(
+                    onMovieClick = { movieId ->
+                        navController.navigate("info/$movieId")
+                    }
+                )
             }
 
             composable(
@@ -34,10 +36,13 @@ fun MovieApp() {
                 arguments = listOf(navArgument("movieId") { type = NavType.IntType })
             ) {
                 it.arguments?.getInt("movieId")
-                    ?.let { _ ->
-                        InfoScreen(onNavigateBack = {
-                            navController.popBackStack()
-                        })
+                    ?.let { id ->
+                        InfoScreen(
+                            movieId = id,
+                            onNavigateBack = {
+                                navController.popBackStack()
+                            }
+                        )
                     }
             }
         }

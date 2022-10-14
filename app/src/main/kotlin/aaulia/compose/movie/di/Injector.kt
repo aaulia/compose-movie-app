@@ -1,9 +1,13 @@
 package aaulia.compose.movie.di
 
 import aaulia.compose.movie.BuildConfig
+import aaulia.compose.movie.data.local.MovieDb
+import aaulia.compose.movie.data.local.dao.MovieDao
 import aaulia.compose.movie.data.remote.TMDBService
 import aaulia.compose.movie.data.repository.MovieRepository
 import aaulia.compose.movie.data.repository.TMDBRepository
+import android.content.Context
+import androidx.room.Room
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -15,6 +19,12 @@ import retrofit2.Retrofit
 import retrofit2.create
 
 object Injector {
+    private lateinit var appContext: Context
+
+    fun init(appContext: Context) {
+        this.appContext = appContext
+    }
+
     private val httpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(
@@ -58,5 +68,15 @@ object Injector {
         retrofit.create()
     }
 
-    val repository: MovieRepository by lazy { TMDBRepository(service) }
+    private val db: MovieDb by lazy {
+        Room.databaseBuilder(
+            appContext,
+            MovieDb::class.java,
+            "movie-db"
+        ).build()
+    }
+
+    private val dao: MovieDao by lazy { db.movieDao() }
+
+    val repository: MovieRepository by lazy { TMDBRepository(service, dao) }
 }

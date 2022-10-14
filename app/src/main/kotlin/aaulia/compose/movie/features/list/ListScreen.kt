@@ -1,6 +1,5 @@
 package aaulia.compose.movie.features.list
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -19,7 +18,6 @@ enum class MovieType {
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListScreen(
     movieType: MovieType,
