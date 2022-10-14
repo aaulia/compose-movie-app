@@ -1,12 +1,19 @@
 package aaulia.compose.movie.features.home
 
+import aaulia.compose.movie.R
 import aaulia.compose.movie.features.list.ListScreen
 import aaulia.compose.movie.features.list.MovieType
 import aaulia.compose.movie.ui.theme.MovieAppTheme
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -19,6 +26,30 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.mapNotNull
+
+
+enum class HomeRoute(
+    @StringRes
+    val label: Int,
+    val image: ImageVector
+) {
+    PLAYING(
+        label = R.string.home_nav_playing,
+        image = Icons.Default.PlayArrow
+    ),
+    POPULAR(
+        label = R.string.home_nav_popular,
+        image = Icons.Default.Star
+    ),
+    NEARING(
+        label = R.string.home_nav_nearing,
+        image = Icons.Default.List
+    );
+
+    companion object {
+        val DEFAULT = PLAYING
+    }
+}
 
 
 @Composable
