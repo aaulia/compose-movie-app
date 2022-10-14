@@ -1,8 +1,11 @@
 package aaulia.compose.movie.features.info
 
+import aaulia.compose.movie.R
 import aaulia.compose.movie.features.info.model.Movie
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -15,12 +18,9 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -49,7 +49,9 @@ fun InfoScreen(
         }
     ) { paddingValues ->
         Column(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -67,6 +69,7 @@ fun InfoScreen(
             Column(
                 modifier = Modifier
                     .offset(y = (-128).dp)
+                    .padding(16.dp)
                     .fillMaxWidth()
             ) {
                 AsyncImage(
@@ -77,16 +80,23 @@ fun InfoScreen(
                     contentDescription = "",
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier
-                        .padding(8.dp)
                         .width(128.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .align(Alignment.CenterHorizontally)
                 )
 
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(16.dp))
+
+                Text(
+                    text = stringResource(id = R.string.overview),
+                    style = MaterialTheme.typography.h6
+                )
+
                 Text(
                     text = movie.overview,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    textAlign = TextAlign.Center
+                    style = MaterialTheme.typography.caption
                 )
             }
         }
@@ -112,9 +122,7 @@ fun InfoTopBar(
                     Text(
                         text = movie.tagline,
                         overflow = TextOverflow.Ellipsis,
-                        fontSize = 12.sp,
-                        fontStyle = FontStyle.Italic,
-                        fontWeight = FontWeight.Normal,
+                        style = MaterialTheme.typography.caption,
                         maxLines = 1
                     )
                 }

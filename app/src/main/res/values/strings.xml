@@ -3,4 +3,5 @@
     <string name="home_nav_popular">Popular</string>
     <string name="home_nav_playing">Now Playing</string>
     <string name="home_nav_nearing">Coming Soon</string>
+    <string name="overview">Overview</string>
 </resources>
