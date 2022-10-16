@@ -31,6 +31,7 @@ android {
 
         buildConfigField "String", "TMDB_POSTER_SIZE",   "\"w342\""
         buildConfigField "String", "TMDB_BACKDROP_SIZE", "\"w780\""
+        buildConfigField "String", "TMDB_PROFILE_SIZE",  "\"w185\""
 
         buildConfigField "String", "TMDB_REGION",        "\"ID\""
         //@formatter:on

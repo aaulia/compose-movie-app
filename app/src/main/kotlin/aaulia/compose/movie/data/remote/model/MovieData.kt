@@ -33,15 +33,32 @@ data class MovieDetail(
     val tagline : String            = "",
     val homepage: String            = "",
 
-    val genres  : List<MovieGenre>  = emptyList()
+    val genres  : List<MovieGenre>  = emptyList(),
+    val credits : MovieCredits      = MovieCredits()
 )
 //@formatter:on
 
 //@formatter:off
 @Serializable
 data class MovieGenre(
-    val id: Int,
+    val id  : Int,
     val name: String
+)
+//@formatter:on
+
+@Serializable
+data class MovieCredits(
+    @SerialName("cast")
+    val casts: List<MovieCast> = emptyList()
+)
+
+@Serializable
+data class MovieCast(
+    val id: Int,
+    val name: String,
+    val character: String = "",
+    @SerialName("profile_path")
+    val image: Profile = Profile()
 )
 //@formatter:on
 
@@ -72,5 +89,17 @@ value class Backdrop(private val path: String? = null) : MovieImage {
     override val complete: String
         get() = path
             ?.let { "${BuildConfig.TMDB_IMG_URL}${BuildConfig.TMDB_BACKDROP_SIZE}$it" }
+            ?: ""
+}
+
+@Serializable
+@JvmInline
+value class Profile(private val path: String? = null) : MovieImage {
+    override val relative: String
+        get() = path.orEmpty()
+
+    override val complete: String
+        get() = path
+            ?.let { "${BuildConfig.TMDB_IMG_URL}${BuildConfig.TMDB_PROFILE_SIZE}$it" }
             ?: ""
 }

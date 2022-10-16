@@ -1,5 +1,6 @@
 package aaulia.compose.movie.features.info.model
 
+import aaulia.compose.movie.data.local.model.Cast
 import aaulia.compose.movie.data.local.model.Genre
 import aaulia.compose.movie.data.local.model.MovieDetail
 
@@ -21,14 +22,31 @@ fun MovieDetail.toMovieCommon() =
     )
 
 //@formatter:off
+data class MovieCast(
+    val name        : String,
+    val character   : String,
+    val image       : String
+)
+//@formatter:on
+
+fun Cast.toCast() =
+    MovieCast(
+        name,
+        character,
+        image
+    )
+
+//@formatter:off
 data class MovieExtras(
-    val tagline : String        = "",
-    val genres  : List<String>  = emptyList()
+    val tagline : String            = "",
+    val genres  : List<String>      = emptyList(),
+    val casts   : List<MovieCast>   = emptyList()
 )
 //@formatter:on
 
 fun MovieDetail.toMovieExtras() =
     MovieExtras(
         movie.tagline,
-        genres.map(Genre::name)
+        genres.map(Genre::name),
+        casts.map(Cast::toCast)
     )

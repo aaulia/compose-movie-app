@@ -12,3 +12,4 @@ data class Genre(
 )
 
 fun MovieGenre.toGenre() = Genre(id, name)
+

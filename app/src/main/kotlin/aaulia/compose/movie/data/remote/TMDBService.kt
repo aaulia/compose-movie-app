@@ -16,6 +16,6 @@ interface TMDBService {
     @GET("movie/upcoming")
     suspend fun getNearing(@Query("page") page: Int): MoviePage
 
-    @GET("movie/{movieId}")
+    @GET("movie/{movieId}?append_to_response=credits")
     suspend fun getDetails(@Path("movieId") id: Int): MovieDetail
 }
