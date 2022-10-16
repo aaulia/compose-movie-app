@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "movies")
 data class Movie(
     @PrimaryKey
-    val id      : Int,
+    val movieId : Int,
 
     val title   : String,
     val overview: String,
@@ -23,7 +23,7 @@ data class Movie(
 //@formatter:off
 fun MovieSimple.toMovie() =
     Movie(
-        id          = id,
+        movieId          = id,
 
         title       = title,
         overview    = overview,
@@ -37,7 +37,7 @@ fun MovieSimple.toMovie() =
 //@formatter:off
 fun MovieDetail.toMovie() =
     Movie(
-        id          = id,
+        movieId          = id,
 
         title       = title,
         overview    = overview,

@@ -1,7 +1,6 @@
 package aaulia.compose.movie.features.info
 
 import aaulia.compose.movie.R
-import aaulia.compose.movie.features.info.model.Movie
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,12 +40,14 @@ fun InfoScreen(
             }
         })
 ) {
-    val movie by viewModel.movie.collectAsStateWithLifecycle(LocalLifecycleOwner.current)
+    val common by viewModel.common.collectAsStateWithLifecycle(LocalLifecycleOwner.current)
+    val extras by viewModel.extras.collectAsStateWithLifecycle(LocalLifecycleOwner.current)
 
     Scaffold(
         topBar = {
             InfoTopBar(
-                movie = movie,
+                title = common.title,
+                subTitle = extras.tagline,
                 onNavigateBack = onNavigateBack
             )
         }
@@ -58,7 +59,7 @@ fun InfoScreen(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(movie.backdropPath)
+                    .data(common.backdrop)
                     .crossfade(true)
                     .build(),
                 contentDescription = "",
@@ -77,7 +78,7 @@ fun InfoScreen(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(movie.posterPath)
+                        .data(common.poster)
                         .crossfade(true)
                         .build(),
                     contentDescription = "",
@@ -98,7 +99,7 @@ fun InfoScreen(
                 )
 
                 Text(
-                    text = movie.overview,
+                    text = common.overview,
                     style = MaterialTheme.typography.caption
                 )
             }
@@ -109,21 +110,22 @@ fun InfoScreen(
 
 @Composable
 fun InfoTopBar(
-    movie: Movie,
+    title: String,
+    subTitle: String,
     onNavigateBack: () -> Unit = {}
 ) {
     TopAppBar(
         title = {
             Column {
                 Text(
-                    text = movie.title,
+                    text = title,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
 
-                if (movie.tagline.isNotEmpty()) {
+                if (subTitle.isNotEmpty()) {
                     Text(
-                        text = movie.tagline,
+                        text = subTitle,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.caption,
                         maxLines = 1

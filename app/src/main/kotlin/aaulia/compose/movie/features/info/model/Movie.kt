@@ -1,33 +1,34 @@
 package aaulia.compose.movie.features.info.model
 
-import aaulia.compose.movie.data.local.model.Movie as MovieEntity
+import aaulia.compose.movie.data.local.model.Genre
+import aaulia.compose.movie.data.local.model.MovieDetail
 
-data class Movie(
-    val title: String,
-    val overview: String,
-    val posterPath: String,
-    val backdropPath: String,
+//@formatter:off
+data class MovieCommon(
+    val title   : String = "",
+    val poster  : String = "",
+    val backdrop: String = "",
+    val overview: String = ""
+)
+//@formatter:on
 
-    val tagline: String,
-) {
-    companion object {
-        val EMPTY = Movie(
-            title = "",
-            overview = "",
-            posterPath = "",
-            backdropPath = "",
+fun MovieDetail.toMovieCommon() =
+    MovieCommon(
+        movie.title,
+        movie.poster,
+        movie.backdrop,
+        movie.overview
+    )
 
-            tagline = "",
-        )
-    }
-}
+//@formatter:off
+data class MovieExtras(
+    val tagline : String        = "",
+    val genres  : List<String>  = emptyList()
+)
+//@formatter:on
 
-fun MovieEntity.toMovie() =
-    Movie(
-        title,
-        overview,
-        poster,
-        backdrop,
-
-        tagline,
+fun MovieDetail.toMovieExtras() =
+    MovieExtras(
+        movie.tagline,
+        genres.map(Genre::name)
     )

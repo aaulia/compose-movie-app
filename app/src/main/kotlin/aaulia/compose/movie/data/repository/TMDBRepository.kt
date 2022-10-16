@@ -1,9 +1,12 @@
 package aaulia.compose.movie.data.repository
 
 import aaulia.compose.movie.data.local.dao.MovieDao
-import aaulia.compose.movie.data.local.model.Movie
+import aaulia.compose.movie.data.local.model.MovieDetail
+import aaulia.compose.movie.data.local.model.relation.MovieGenreRelation
+import aaulia.compose.movie.data.local.model.toGenre
 import aaulia.compose.movie.data.local.model.toMovie
 import aaulia.compose.movie.data.remote.TMDBService
+import aaulia.compose.movie.data.remote.model.MovieGenre
 import aaulia.compose.movie.data.remote.model.MoviePage
 import aaulia.compose.movie.data.remote.model.MovieSimple
 import kotlinx.coroutines.flow.Flow
@@ -18,10 +21,17 @@ class TMDBRepository(
 
     override suspend fun fetchMovie(id: Int) {
         val detail = service.getDetails(id)
-        dao.updateMovie(movie = detail.toMovie())
+        val genres = detail.genres.map(MovieGenre::toGenre).toTypedArray()
+        val relMap = detail.genres
+            .map { (genreId, _) -> MovieGenreRelation(detail.id, genreId) }
+            .toTypedArray()
+
+        dao.insertMovies(detail.toMovie())
+        dao.insertGenres(*genres)
+        dao.insertMovieGenreRelations(*relMap)
     }
 
-    override fun queryMovie(id: Int): Flow<Movie> = dao.selectMovie(id)
+    override fun queryMovieDetail(id: Int): Flow<MovieDetail> = dao.selectMovieDetail(id)
 
     private suspend fun store(moviePage: MoviePage) {
         val movieData = moviePage.results.map(MovieSimple::toMovie).toTypedArray()

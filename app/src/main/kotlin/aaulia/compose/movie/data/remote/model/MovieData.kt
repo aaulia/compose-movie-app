@@ -9,11 +9,11 @@ import kotlinx.serialization.Serializable
 data class MovieSimple(
     val id      : Int,
     val title   : String,
-    val overview: String    = "",
+    val overview: String            = "",
     @SerialName("poster_path")
-    val poster  : Poster    = Poster(),
+    val poster  : Poster            = Poster(),
     @SerialName("backdrop_path")
-    val backdrop: Backdrop  = Backdrop()
+    val backdrop: Backdrop          = Backdrop()
 )
 //@formatter:on
 
@@ -22,16 +22,26 @@ data class MovieSimple(
 data class MovieDetail(
     val id      : Int,
     val title   : String,
-    val overview: String    = "",
+    val overview: String            = "",
     @SerialName("poster_path")
-    val poster  : Poster    = Poster(),
+    val poster  : Poster            = Poster(),
     @SerialName("backdrop_path")
-    val backdrop: Backdrop  = Backdrop(),
+    val backdrop: Backdrop          = Backdrop(),
 
     @SerialName("imdb_id")
-    val imdbId  : String    = "",
-    val tagline : String    = "",
-    val homepage: String    = "",
+    val imdbId  : String            = "",
+    val tagline : String            = "",
+    val homepage: String            = "",
+
+    val genres  : List<MovieGenre>  = emptyList()
+)
+//@formatter:on
+
+//@formatter:off
+@Serializable
+data class MovieGenre(
+    val id: Int,
+    val name: String
 )
 //@formatter:on
 

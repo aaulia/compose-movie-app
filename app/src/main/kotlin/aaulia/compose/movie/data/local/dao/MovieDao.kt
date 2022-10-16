@@ -1,6 +1,9 @@
 package aaulia.compose.movie.data.local.dao
 
+import aaulia.compose.movie.data.local.model.Genre
 import aaulia.compose.movie.data.local.model.Movie
+import aaulia.compose.movie.data.local.model.MovieDetail
+import aaulia.compose.movie.data.local.model.relation.MovieGenreRelation
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
@@ -10,10 +13,14 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovies(vararg movies: Movie)
 
-    @Update
-    suspend fun updateMovie(movie: Movie)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertGenres(vararg genres: Genre)
 
-    @Query("SELECT * FROM movies WHERE id = :id LIMIT 1")
-    fun selectMovie(id: Int): Flow<Movie>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMovieGenreRelations(vararg refs: MovieGenreRelation)
+
+    @Transaction
+    @Query("SELECT * FROM movies WHERE movieId = :id LIMIT 1")
+    fun selectMovieDetail(id: Int): Flow<MovieDetail>
 
 }
