@@ -26,8 +26,8 @@ fun MovieEntity.toMovie() =
     Movie(
         title,
         overview,
-        posterPath,
-        backdropPath,
+        poster,
+        backdrop,
 
         tagline,
     )

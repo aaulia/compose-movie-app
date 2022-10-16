@@ -4,50 +4,63 @@ import aaulia.compose.movie.BuildConfig
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
-interface MovieImages {
-    val posterPath: String
-    val backdropPath: String
-}
-
-
+//@formatter:off
 @Serializable
 data class MovieSimple(
-    val id: Int,
-    val title: String,
-    val overview: String,
+    val id      : Int,
+    val title   : String,
+    val overview: String    = "",
     @SerialName("poster_path")
-    override val posterPath: String = "",
+    val poster  : Poster    = Poster(),
     @SerialName("backdrop_path")
-    override val backdropPath: String = ""
-) : MovieImages
+    val backdrop: Backdrop  = Backdrop()
+)
+//@formatter:on
 
-
+//@formatter:off
 @Serializable
 data class MovieDetail(
-    val id: Int,
-    val title: String,
-    val overview: String,
+    val id      : Int,
+    val title   : String,
+    val overview: String    = "",
     @SerialName("poster_path")
-    override val posterPath: String = "",
+    val poster  : Poster    = Poster(),
     @SerialName("backdrop_path")
-    override val backdropPath: String = "",
+    val backdrop: Backdrop  = Backdrop(),
 
     @SerialName("imdb_id")
-    val imdbId: String = "",
-    val tagline: String = "",
-    val homepage: String = "",
-) : MovieImages
+    val imdbId  : String    = "",
+    val tagline : String    = "",
+    val homepage: String    = "",
+)
+//@formatter:on
 
 
-val MovieImages.fullPosterPath: String
-    get() = if (posterPath.isNotEmpty())
-        "${BuildConfig.TMDB_IMG_URL}${BuildConfig.TMDB_POSTER_SIZE}$posterPath"
-    else
-        ""
+interface MovieImage {
+    val relative: String
+    val complete: String
+}
 
-val MovieImages.fullBackdropPath: String
-    get() = if (backdropPath.isNotEmpty())
-        "${BuildConfig.TMDB_IMG_URL}${BuildConfig.TMDB_BACKDROP_SIZE}$backdropPath"
-    else
-        ""
+@Serializable
+@JvmInline
+value class Poster(private val path: String? = null) : MovieImage {
+    override val relative: String
+        get() = path.orEmpty()
+
+    override val complete: String
+        get() = path
+            ?.let { "${BuildConfig.TMDB_IMG_URL}${BuildConfig.TMDB_POSTER_SIZE}$it" }
+            ?: ""
+}
+
+@Serializable
+@JvmInline
+value class Backdrop(private val path: String? = null) : MovieImage {
+    override val relative: String
+        get() = path.orEmpty()
+
+    override val complete: String
+        get() = path
+            ?.let { "${BuildConfig.TMDB_IMG_URL}${BuildConfig.TMDB_BACKDROP_SIZE}$it" }
+            ?: ""
+}

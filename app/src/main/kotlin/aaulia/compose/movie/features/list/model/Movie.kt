@@ -1,12 +1,20 @@
 package aaulia.compose.movie.features.list.model
 
 import aaulia.compose.movie.data.remote.model.MovieSimple
-import aaulia.compose.movie.data.remote.model.fullPosterPath
 
+//@formatter:off
 data class Movie(
-    val id: Int,
-    val title: String,
-    val poster: String
+    val id      : Int,
+    val title   : String,
+    val poster  : String
 )
+//@formatter:on
 
-fun MovieSimple.toMovie() = Movie(id, title, fullPosterPath)
+//@formatter:off
+fun MovieSimple.toMovie() =
+    Movie(
+        id      = id,
+        title   = title,
+        poster  = poster.complete
+    )
+//@formatter:on
