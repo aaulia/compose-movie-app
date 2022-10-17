@@ -37,11 +37,8 @@ fun ListScreen(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(
-            count = movies.itemCount,
-            key = { it }
-        ) { index ->
-            movies[index]?.let { movie -> ListItem(movie, onClick) }
+        items(count = movies.itemCount) { index ->
+            ListItem(movie = movies[index], onClick = onClick)
         }
     }
 }
