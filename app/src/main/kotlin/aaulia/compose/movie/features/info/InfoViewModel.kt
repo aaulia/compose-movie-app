@@ -22,7 +22,7 @@ class InfoViewModel(
 
     init {
         viewModelScope.launch {
-            movieRepo.fetchMovie(movieId)
+            movieRepo.getDetails(movieId)
         }
     }
 

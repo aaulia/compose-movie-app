@@ -1,8 +1,6 @@
 package aaulia.compose.movie.features.list
 
-import aaulia.compose.movie.data.remote.model.MovieCommon
-import aaulia.compose.movie.data.remote.model.MoviePage
-import aaulia.compose.movie.data.remote.model.nextPage
+import aaulia.compose.movie.data.remote.model.*
 import aaulia.compose.movie.data.repository.MovieRepository
 import aaulia.compose.movie.di.Injector
 import aaulia.compose.movie.features.list.model.Movie
@@ -16,7 +14,11 @@ class ListViewModel(
     movieType: MovieType,
     movieRepo: MovieRepository = Injector.repository
 ) : ViewModel() {
-    val movieFlow = Pager(PagingConfig(2)) { ListPagingSource(movieType, movieRepo) }
+    val movieFlow = Pager(
+        config = PagingConfig(
+            pageSize = MoviePage.ITEMS_PER_PAGE
+        )
+    ) { ListPagingSource(movieType, movieRepo) }
         .flow
         .cachedIn(viewModelScope)
 }
@@ -43,8 +45,10 @@ private class ListPagingSource(
         val pageResult = getPageData(pageNumber)
         return LoadResult.Page(
             data = pageResult.results.map(MovieCommon::toMovie),
-            prevKey = null,
-            nextKey = pageResult.nextPage
+            prevKey = pageResult.prevPage,
+            nextKey = pageResult.nextPage,
+            itemsAfter = pageResult.itemsAfter,
+            itemsBefore = pageResult.itemsBefore,
         )
     }
 }

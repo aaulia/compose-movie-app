@@ -9,7 +9,7 @@ interface MovieRepository {
     suspend fun getPlaying(page: Int): MoviePage
     suspend fun getPopular(page: Int): MoviePage
     suspend fun getNearing(page: Int): MoviePage
-    suspend fun fetchMovie(id: Int)
+    suspend fun getDetails(id: Int)
 
     fun queryMovieCommon(id: Int): Flow<MovieCommon>
     fun queryMovieDetail(id: Int): Flow<MovieDetail>

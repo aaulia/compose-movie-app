@@ -17,7 +17,7 @@ class TMDBRepository(
     override suspend fun getPopular(page: Int) = service.getPopular(page).apply { store(this) }
     override suspend fun getNearing(page: Int) = service.getNearing(page).apply { store(this) }
 
-    override suspend fun fetchMovie(id: Int) {
+    override suspend fun getDetails(id: Int) {
         //@formatter:off
         val remote = service.getDetails(id)
         val extras = remote.toMovieExtras()

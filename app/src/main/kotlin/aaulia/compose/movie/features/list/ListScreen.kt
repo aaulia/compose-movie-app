@@ -32,13 +32,14 @@ fun ListScreen(
     val movies = viewModel.movieFlow.collectAsLazyPagingItems()
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Adaptive(96.dp),
         contentPadding = PaddingValues(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(
-            count = movies.itemCount
+            count = movies.itemCount,
+            key = { index -> movies[index]?.id ?: index }
         ) { index ->
             movies[index]?.let { movie -> ListItem(movie, onClick) }
         }
