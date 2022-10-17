@@ -16,7 +16,8 @@ class ListViewModel(
 ) : ViewModel() {
     val movieFlow = Pager(
         config = PagingConfig(
-            pageSize = MoviePage.ITEMS_PER_PAGE
+            pageSize = MoviePage.PAGE_SIZE,
+            prefetchDistance = MoviePage.PREFETCH_DISTANCE,
         )
     ) { ListPagingSource(movieType, movieRepo) }
         .flow

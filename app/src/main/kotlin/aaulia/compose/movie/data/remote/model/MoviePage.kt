@@ -16,7 +16,8 @@ data class MoviePage(
     val totalResults: Int
 ) {
     companion object {
-        const val ITEMS_PER_PAGE = 20
+        const val PAGE_SIZE = 20
+        const val PREFETCH_DISTANCE = (PAGE_SIZE * 0.2).toInt()
     }
 }
 
@@ -27,7 +28,7 @@ val MoviePage.prevPage: Int?
     get() = if (page > 1) (page - 1) else null
 
 val MoviePage.itemsBefore: Int
-    get() = (page - 1) * MoviePage.ITEMS_PER_PAGE
+    get() = (page - 1) * MoviePage.PAGE_SIZE
 
 val MoviePage.itemsAfter: Int
     get() = max(0, totalResults - (itemsBefore + results.size))

@@ -39,7 +39,7 @@ fun ListScreen(
     ) {
         items(
             count = movies.itemCount,
-            key = { index -> movies[index]?.id ?: index }
+            key = { it }
         ) { index ->
             movies[index]?.let { movie -> ListItem(movie, onClick) }
         }
