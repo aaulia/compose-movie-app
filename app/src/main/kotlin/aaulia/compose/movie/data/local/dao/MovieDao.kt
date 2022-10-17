@@ -7,27 +7,39 @@ import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface MovieDao {
+abstract class MovieDao {
 
     @Upsert(entity = Movie::class)
-    suspend fun upsertMovies(vararg movies: MovieCommon)
+    abstract suspend fun upsertMovies(vararg movies: MovieCommon)
 
     @Update(entity = Movie::class)
-    suspend fun updateDetail(extras: MovieExtras)
+    abstract suspend fun updateExtras(extras: MovieExtras)
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertGenres(vararg genres: Genre)
+    abstract suspend fun insertGenres(genres: List<Genre>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovieGenreRelations(vararg refs: MovieGenreRelation)
+    abstract suspend fun insertMovieGenreRelations(refs: List<MovieGenreRelation>)
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCasts(vararg casts: Cast)
+    abstract suspend fun insertCasts(casts: List<Cast>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovieCastRelations(vararg refs: MovieCastRelation)
+    abstract suspend fun insertMovieCastRelations(refs: List<MovieCastRelation>)
+
+
+    @Transaction
+    open suspend fun updateMovie(extras: MovieExtras, genres: List<Genre>, casts: List<Cast>) {
+        updateExtras(extras)
+
+        insertGenres(genres)
+        insertMovieGenreRelations(genres.map { MovieGenreRelation(extras.movieId, it.genreId) })
+
+        insertCasts(casts)
+        insertMovieGenreRelations(casts.map { MovieGenreRelation(extras.movieId, it.castId) })
+    }
 
 
     @Query(
@@ -35,7 +47,7 @@ interface MovieDao {
         SELECT movieId, title, overview, poster, backdrop FROM movies WHERE movieId = :id LIMIT 1
         """
     )
-    fun selectMovieCommon(id: Int): Flow<MovieCommon>
+    abstract fun selectMovieCommon(id: Int): Flow<MovieCommon>
 
     @Transaction
     @Query(
@@ -43,6 +55,6 @@ interface MovieDao {
         SELECT movieId, tagline, status, imdbId, runtime, homepage FROM movies WHERE movieId = :id LIMIT 1
         """
     )
-    fun selectMovieDetail(id: Int): Flow<MovieDetail>
+    abstract fun selectMovieDetail(id: Int): Flow<MovieDetail>
 
 }
