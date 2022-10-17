@@ -1,7 +1,7 @@
 package aaulia.compose.movie.features.list
 
+import aaulia.compose.movie.data.remote.model.MovieCommon
 import aaulia.compose.movie.data.remote.model.MoviePage
-import aaulia.compose.movie.data.remote.model.MovieSimple
 import aaulia.compose.movie.data.remote.model.nextPage
 import aaulia.compose.movie.data.repository.MovieRepository
 import aaulia.compose.movie.di.Injector
@@ -42,7 +42,7 @@ private class ListPagingSource(
         val pageNumber = params.key ?: 1
         val pageResult = getPageData(pageNumber)
         return LoadResult.Page(
-            data = pageResult.results.map(MovieSimple::toMovie),
+            data = pageResult.results.map(MovieCommon::toMovie),
             prevKey = null,
             nextKey = pageResult.nextPage
         )

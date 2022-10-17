@@ -3,11 +3,13 @@ package aaulia.compose.movie.data.remote.model
 import aaulia.compose.movie.BuildConfig
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.util.*
 
 //@formatter:off
 @Serializable
-data class MovieSimple(
+data class MovieCommon(
     val id      : Int,
+
     val title   : String,
     val overview: String            = "",
     @SerialName("poster_path")
@@ -19,19 +21,15 @@ data class MovieSimple(
 
 //@formatter:off
 @Serializable
-data class MovieDetail(
+data class MovieExtras(
     val id      : Int,
-    val title   : String,
-    val overview: String            = "",
-    @SerialName("poster_path")
-    val poster  : Poster            = Poster(),
-    @SerialName("backdrop_path")
-    val backdrop: Backdrop          = Backdrop(),
 
+    val tagline : String    = "",
+    val status  : String    = "",
     @SerialName("imdb_id")
-    val imdbId  : String            = "",
-    val tagline : String            = "",
-    val homepage: String            = "",
+    val imdbId  : String    = "",
+    val runtime : Int       = 0,
+    val homepage: String    = "",
 
     val genres  : List<MovieGenre>  = emptyList(),
     val credits : MovieCredits      = MovieCredits()
@@ -52,13 +50,14 @@ data class MovieCredits(
     val casts: List<MovieCast> = emptyList()
 )
 
+//@formatter:off
 @Serializable
 data class MovieCast(
-    val id: Int,
-    val name: String,
-    val character: String = "",
+    val id          : Int,
+    val name        : String,
+    val character   : String = "",
     @SerialName("profile_path")
-    val image: Profile = Profile()
+    val image       : Profile = Profile()
 )
 //@formatter:on
 

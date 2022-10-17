@@ -1,19 +1,16 @@
 package aaulia.compose.movie.data.repository
 
 import aaulia.compose.movie.data.local.dao.MovieDao
-import aaulia.compose.movie.data.local.model.MovieDetail
+import aaulia.compose.movie.data.local.model.*
 import aaulia.compose.movie.data.local.model.relation.MovieCastRelation
 import aaulia.compose.movie.data.local.model.relation.MovieGenreRelation
-import aaulia.compose.movie.data.local.model.toCast
-import aaulia.compose.movie.data.local.model.toGenre
-import aaulia.compose.movie.data.local.model.toMovie
 import aaulia.compose.movie.data.remote.TMDBService
 import aaulia.compose.movie.data.remote.model.MovieCast
 import aaulia.compose.movie.data.remote.model.MovieGenre
 import aaulia.compose.movie.data.remote.model.MoviePage
-import aaulia.compose.movie.data.remote.model.MovieSimple
 import kotlinx.coroutines.flow.Flow
-import aaulia.compose.movie.data.remote.model.MovieDetail as RemoteMovieDetail
+import aaulia.compose.movie.data.remote.model.MovieCommon as RemoteMovieCommon
+import aaulia.compose.movie.data.remote.model.MovieExtras as RemoteMovieExtras
 
 class TMDBRepository(
     private val service: TMDBService,
@@ -25,25 +22,27 @@ class TMDBRepository(
 
     override suspend fun fetchMovie(id: Int) {
         service.getDetails(id).apply {
-            storeMovie()
+            updateMovie()
             storeGenres()
             storeCasts()
         }
     }
 
+    override fun queryMovieCommon(id: Int): Flow<MovieCommon> = dao.selectMovieCommon(id)
+
     override fun queryMovieDetail(id: Int): Flow<MovieDetail> = dao.selectMovieDetail(id)
 
     private suspend fun store(moviePage: MoviePage) {
-        val movieData = moviePage.results.map(MovieSimple::toMovie).toTypedArray()
-        dao.insertMovies(*movieData)
+        val movieData = moviePage.results.map(RemoteMovieCommon::toMovieCommon).toTypedArray()
+        dao.upsertMovies(*movieData)
     }
 
 
-    private suspend fun RemoteMovieDetail.storeMovie() {
-        dao.insertMovies(toMovie())
+    private suspend fun RemoteMovieExtras.updateMovie() {
+        dao.updateDetail(toMovieExtras())
     }
 
-    private suspend fun RemoteMovieDetail.storeGenres() {
+    private suspend fun RemoteMovieExtras.storeGenres() {
         val values = genres.map(MovieGenre::toGenre).toTypedArray()
         val relMap = values
             .map { (genreId, _) -> MovieGenreRelation(id, genreId) }
@@ -53,7 +52,7 @@ class TMDBRepository(
         dao.insertMovieGenreRelations(*relMap)
     }
 
-    private suspend fun RemoteMovieDetail.storeCasts() {
+    private suspend fun RemoteMovieExtras.storeCasts() {
         val values = credits.casts.map(MovieCast::toCast).toTypedArray()
         val relMap = values
             .map { (castId, _) -> MovieCastRelation(id, castId) }

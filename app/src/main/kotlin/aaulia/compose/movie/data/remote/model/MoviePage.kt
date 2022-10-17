@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MoviePage(
     val page: Int,
-    val results: List<MovieSimple>,
+    val results: List<MovieCommon>,
 
     @SerialName("total_pages")
     val totalPages: Int,

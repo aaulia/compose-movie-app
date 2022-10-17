@@ -1,6 +1,6 @@
 package aaulia.compose.movie.data.remote
 
-import aaulia.compose.movie.data.remote.model.MovieDetail
+import aaulia.compose.movie.data.remote.model.MovieExtras
 import aaulia.compose.movie.data.remote.model.MoviePage
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -17,5 +17,5 @@ interface TMDBService {
     suspend fun getNearing(@Query("page") page: Int): MoviePage
 
     @GET("movie/{movieId}?append_to_response=credits")
-    suspend fun getDetails(@Path("movieId") id: Int): MovieDetail
+    suspend fun getDetails(@Path("movieId") id: Int): MovieExtras
 }

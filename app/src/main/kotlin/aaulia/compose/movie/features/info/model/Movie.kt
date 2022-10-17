@@ -2,7 +2,8 @@ package aaulia.compose.movie.features.info.model
 
 import aaulia.compose.movie.data.local.model.Cast
 import aaulia.compose.movie.data.local.model.Genre
-import aaulia.compose.movie.data.local.model.MovieDetail
+import aaulia.compose.movie.data.local.model.MovieCommon as LocalMovieCommon
+import aaulia.compose.movie.data.local.model.MovieDetail as LocalMovieDetail
 
 //@formatter:off
 data class MovieCommon(
@@ -13,12 +14,12 @@ data class MovieCommon(
 )
 //@formatter:on
 
-fun MovieDetail.toMovieCommon() =
+fun LocalMovieCommon.toMovieCommon() =
     MovieCommon(
-        movie.title,
-        movie.poster,
-        movie.backdrop,
-        movie.overview
+        title,
+        poster,
+        backdrop,
+        overview
     )
 
 //@formatter:off
@@ -44,9 +45,9 @@ data class MovieExtras(
 )
 //@formatter:on
 
-fun MovieDetail.toMovieExtras() =
+fun LocalMovieDetail.toMovieExtras() =
     MovieExtras(
-        movie.tagline,
+        extras.tagline ?: "",
         genres.map(Genre::name),
         casts.map(Cast::toCast)
     )

@@ -1,6 +1,6 @@
 package aaulia.compose.movie.features.list.model
 
-import aaulia.compose.movie.data.remote.model.MovieSimple
+import aaulia.compose.movie.data.remote.model.MovieCommon
 
 //@formatter:off
 data class Movie(
@@ -11,7 +11,7 @@ data class Movie(
 //@formatter:on
 
 //@formatter:off
-fun MovieSimple.toMovie() =
+fun MovieCommon.toMovie() =
     Movie(
         id      = id,
         title   = title,
