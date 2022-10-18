@@ -1,6 +1,8 @@
 package aaulia.compose.movie.features.info
 
 import aaulia.compose.movie.R
+import aaulia.compose.movie.ui.component.MovieBackdrop
+import aaulia.compose.movie.ui.component.MoviePoster
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,8 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -25,8 +25,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -57,41 +55,36 @@ fun InfoScreen(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(common.backdrop)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "",
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .alpha(0.5f)
-                    .aspectRatio(16.0f / 9.0f)
-                    .fillMaxWidth()
-            )
+            Box(modifier = Modifier.aspectRatio(1.3333334f)) {
+                MovieBackdrop(
+                    image = common.backdrop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .alpha(0.5f)
+                )
 
-            Column(
-                modifier = Modifier
-                    .offset(y = (-128).dp)
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(common.poster)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = "",
-                    contentScale = ContentScale.FillWidth,
+                MoviePoster(
+                    image = common.poster,
                     modifier = Modifier
                         .width(128.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .align(Alignment.CenterHorizontally)
+                        .align(Alignment.BottomCenter)
                 )
+            }
 
-                Spacer(modifier = Modifier
+            Column(
+                modifier = Modifier
+//                    .offset(y = (-128).dp)
+                    .padding(16.dp)
                     .fillMaxWidth()
-                    .height(16.dp))
+            ) {
+
+
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(16.dp)
+                )
 
                 Text(
                     text = stringResource(id = R.string.overview),
